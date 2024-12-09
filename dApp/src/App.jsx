@@ -2,23 +2,22 @@ import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react
 import {
     WalletModalProvider,
     WalletDisconnectButton,
-    WalletMultiButton
+    WalletMultiButton,
 } from '@solana/wallet-adapter-react-ui';
 
 import '@solana/wallet-adapter-react-ui/styles.css';
-import { SendTokens } from './SendTokens';
-import { SignMessage } from './SignMessage';
+import RequestAirdrop from './components/RequestAirdrop';
 function App() {
   return (
-    <ConnectionProvider endpoint={'https://api.devnet.solana.com'}>
+    <ConnectionProvider endpoint={'https://solana-devnet.g.alchemy.com/v2/wwDruBIMUbkBfteO3-Fs06DM-rItaD92'}>
           <WalletProvider wallets={[]} autoConnect>
               <WalletModalProvider>
-                <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                  <WalletMultiButton />
-                  <WalletDisconnectButton />
-                </div>
-                <SignMessage />
-                <SendTokens />
+               < WalletMultiButton/>
+               <WalletDisconnectButton />
+               <div>
+                hi there <b> hello</b>
+               </div>
+               <RequestAirdrop/>
               </WalletModalProvider>
           </WalletProvider>
       </ConnectionProvider>
