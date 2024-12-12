@@ -1,0 +1,9 @@
+name = "backened"
+main = "src/index.ts"
+compatibility_date = "2024-12-11"
+
+# compatibility_flags = [ "nodejs_compat" ]
+
+# [vars]
+
+DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiN2YyMTk3ZmItZTY4My00NjZlLWEwNjktNTIzY2E1NTc2MjkxIiwidGVuYW50X2lkIjoiNTk3ZWE3YjExNDg4NmRlNzVjZTA1NTRlZDRlYzQ2YjZmYzRhZDkwZTA3ZWJkYzU3MTNlODEwNjQ3Yjk2NzIxOCIsImludGVybmFsX3NlY3JldCI6IjMyYzE0NTEyLWMzZGYtNGZjMS1hZGIxLThjNmMxOTFiOGQ0OCJ9.gtbQwYyl7soKBfzT9bVNItl2DcLsZcOyK84Wwguz0Bc" 
