@@ -1,17 +1,34 @@
 import { Hono } from 'hono'
-
-const app = new Hono()
-
-app.post('/api/v1/signup', (c) => {
-  return c.text('Hello Hono!')
-})
-
-app.post('/api/v1/sigin', (c) => {
-  return c.text('Hello Hono!')
-})
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
+import { env } from 'hono/adapter'
+import {decode ,sign, verify} from 'hono/jwt'
+import { userRouter } from './routes/user'
 
 
-app.post('/api/v1/blog', (c) => {
+const app = new Hono<{
+  Bindings: {
+  DATABASE_URL: string
+  JWT_TOKEN: string
+  }
+
+}>()
+
+
+app.route("/api/v1/user", userRouter);
+app.route("/api/v1/blog", blogRouter);
+
+
+app.post('/api/v1/blog', async(c) => {
+  const header = c.req.header("authorization") || " ";
+  // Bearer token = ["Bearer", token]
+  const token = header.split(" ")[1];
+   const response =  await verify(token, env(c).JWT_TOKEN);
+
+   if(!response){
+    c.status(401);
+    return c.json({ error: 'Invalid token' })
+   }
   return c.text('Hello Hono!')
 })
 
