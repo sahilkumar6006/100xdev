@@ -6,11 +6,16 @@ import { sign } from 'hono/jwt';
 import app from '..';
 
 
-export const userRouter = new Hono();
+export const userRouter = new Hono<{
+    Bindings: {
+      DATABASE_URL: string
+      JWT_TOKEN: string
+    }
+}>();
 
 
 
-app.post('/api/v1/signup',  async  (c) => { 
+userRouter.post('/api/v1/signup',  async  (c) => { 
   const body = await c.req.json();
   const prima = new PrismaClient({
     datasourceUrl: env(c).DATABASE_URL,
@@ -32,7 +37,7 @@ app.post('/api/v1/signup',  async  (c) => {
 
   
 
-app.post('/api/v1/sigin', async(c) => {
+userRouter.post('/api/v1/sigin', async(c) => {
  const prisma = new PrismaClient({
     datasourceUrl: env(c).DATABASE_URL,
   }).$extends(withAccelerate());
