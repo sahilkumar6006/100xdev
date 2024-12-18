@@ -9,7 +9,12 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 
  const router = Router();
  const primaClient = new PrismaClient();
- const s3Client = new S3Client();
+ const s3Client = new S3Client({
+    Credentials:{
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    }
+ });
  
  router.get("/presignedUrl", authMiddleware, async (req, res) => {
     try {
