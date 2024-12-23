@@ -1,41 +1,49 @@
-import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from "express";
-import { JWT_SECRET } from '..';
-
-interface DecodedToken {
-  userId?: string;
-}
+import { JWT_SECRET, WORKER_JWT_SECRET } from "../config";
+import jwt from "jsonwebtoken";
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader?.split(" ")[1];
+    const authHeader = req.headers["authorization"] ?? "";
 
-    if (!token) {
-        return res.status(401).json({
-            message: "No authentication token provided",
-        });
-    }
-    
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) as DecodedToken;
-        if (!decoded.userId) {
-            return res.status(401).json({
-                message: "Invalid token: No user ID found",
-            });
+        const decoded = jwt.verify(authHeader, JWT_SECRET);
+        console.log(decoded);
+        // @ts-ignore
+        if (decoded.userId) {
+            // @ts-ignore
+            req.userId = decoded.userId;
+            return next();
+        } else {
+            return res.status(403).json({
+                message: "You are not logged in"
+            })    
         }
-
-        // Extend the Request interface to include userId
-        (req as Request & { userId?: string }).userId = decoded.userId;
-        return next();
-    } catch (err) {
-        if (err instanceof jwt.TokenExpiredError) {
-            return res.status(401).json({
-                message: "Token has expired",
-            });
-        }
-        
+    } catch(e) {
         return res.status(403).json({
-            message: "Invalid authentication token",
-        });
+            message: "You are not logged in"
+        })
+    }
+}
+
+export function workerMiddleware(req: Request, res: Response, next: NextFunction) { 
+    const authHeader = req.headers["authorization"] ?? "";
+
+    console.log(authHeader);
+    try {
+        const decoded = jwt.verify(authHeader, WORKER_JWT_SECRET);
+        // @ts-ignore
+        if (decoded.userId) {
+            // @ts-ignore
+            req.userId = decoded.userId;
+            return next();
+        } else {
+            return res.status(403).json({
+                message: "You are not logged in"
+            })    
+        }
+    } catch(e) {
+        return res.status(403).json({
+            message: "You are not logged in"
+        })
     }
 }
